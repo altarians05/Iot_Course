@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Functions: ESP32 Mechatronic Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0b10;
+            --card-bg: rgba(16, 18, 27, 0.95);
+            --esp-blue: #00d2ff;
+            --esp-orange: #ff9d00;
+            --accent-green: #39ff14;
+            --text-gray: #b0b3b8;
+            --code-bg: #1e1e1e;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            opacity: 0.2;
+        }
+
+        /* --- Header --- */
+        header {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle, rgba(0,210,255,0.1) 0%, transparent 70%);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: var(--esp-blue);
+            text-shadow: 0 0 20px rgba(0,210,255,0.5);
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--esp-orange);
+            font-family: 'Orbitron', sans-serif;
+            margin-top: 10px;
+        }
+
+        /* --- Secciones --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid #2a2d3e;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 80px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+
+        .section-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--esp-blue);
+            border-bottom: 2px solid var(--esp-blue);
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 850px) {
+            .grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+        }
+
+        .analogy-box {
+            background: rgba(57, 255, 20, 0.05);
+            border-left: 4px solid var(--accent-green);
+            padding: 20px;
+            border-radius: 0 15px 15px 0;
+            margin: 20px 0;
+        }
+
+        .analogy-box strong {
+            color: var(--accent-green);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            overflow-x: auto;
+            color: #f8f8f2;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        code .keyword { color: #ff79c6; }
+        code .type { color: #8be9fd; }
+        code .func { color: #50fa7b; }
+        code .comment { color: #6272a4; }
+
+        .image-box {
+            text-align: center;
+            background: #000;
+            border-radius: 15px;
+            padding: 10px;
+            border: 1px dashed var(--esp-blue);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 60px;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-gray);
+            border-top: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <h1>ANATOMÍA DE LAS FUNCIONES</h1>
+        <div class="tagline">Ingeniería Mecatrónica | ESP32 Control System</div>
+        <p style="max-width: 600px; color: var(--text-gray); margin-top: 20px;">
+            Las funciones son los módulos de nuestra máquina. Aprenderemos a segmentar el código para crear sistemas escalables, organizados y profesionales.
+        </p>
+    </header>
+
+    <main class="container">
+
+        <section class="section-card">
+            <h2>01. La Función "Letrero"</h2>
+            <div class="grid">
+                <div>
+                    <p><strong>Definición:</strong> Es una función de tipo <code>void</code> que no requiere datos externos para trabajar. Simplemente ejecuta una secuencia fija.</p>
+                    <div class="analogy-box">
+                        <strong>Analogía Mecánica:</strong> Es como un letrero luminoso en una fábrica. No necesita que nadie lo toque ni le pase información; su única misión es brillar y mostrar el mismo mensaje siempre que se le llame.
+                    </div>
+                    <pre><code><span class="keyword">void</span> <span class="func">imprimirEncabezado</span>() {
+  Serial.println(<span class="comment">"--- MONITOREO ---"</span>);
+}</code></pre>
+                </div>
+                <div class="image-box">
+                    
+                    <p><small>Ideal para: Configuraciones iniciales y avisos estáticos.</small></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>02. La Función "Mensajero"</h2>
+            <div class="grid">
+                <div class="image-box">
+                    
+                    <p><small>Ideal para: Encapsular lecturas de sensores (ADC).</small></p>
+                </div>
+                <div>
+                    <p><strong>Definición:</strong> Esta función realiza un proceso y <strong>devuelve</strong> un valor al programa principal. Es como un reporte técnico.</p>
+                    <div class="analogy-box">
+                        <strong>Analogía Mecánica:</strong> Es como un operario con un termómetro. Va al motor, toma la medida y regresa para entregarte el papel con el número. Él no pregunta nada, solo entrega el dato.
+                    </div>
+                    <pre><code><span class="type">float</span> <span class="func">obtenerTemperatura</span>() {
+  <span class="type">int</span> raw = analogRead(<span class="type">34</span>);
+  <span class="keyword">return</span> (raw * <span class="type">100.0</span>) / <span class="type">4095.0</span>;
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>03. La Función "Procesador"</h2>
+            <div class="grid">
+                <div>
+                    <p><strong>Definición:</strong> El nivel más alto. Recibe datos (parámetros), aplica una lógica de ingeniería y devuelve una decisión (retorno).</p>
+                    <div class="analogy-box">
+                        <strong>Analogía Mecánica:</strong> Es el cerebro de la máquina o un comparador industrial. Tú le das una pieza (el dato) y él, tras analizarla, te dice si "Pasa" o "Falla" (True/False).
+                    </div>
+                    <pre><code><span class="type">bool</span> <span class="func">esPeligrosa</span>(<span class="type">float</span> temp) {
+  <span class="keyword">if</span> (temp > <span class="type">75.0</span>) <span class="keyword">return</span> <span class="keyword">true</span>;
+  <span class="keyword">else</span> <span class="keyword">return</span> <span class="keyword">false</span>;
+}</code></pre>
+                </div>
+                <div class="image-box">
+                    
+                    <p><small>Ideal para: Filtros, conversiones y lógica de seguridad.</small></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>04. La Función "Actuador"</h2>
+            <div class="grid">
+                <div class="image-box">
+                    
+                    <p><small>Ideal para: Controlar motores, LEDs y relevadores.</small></p>
+                </div>
+                <div>
+                    <p><strong>Definición:</strong> Recibe una orden específica pero no devuelve ninguna respuesta al código. Su efecto ocurre en el mundo físico.</p>
+                    <div class="analogy-box">
+                        <strong>Analogía Mecánica:</strong> Es el pistón de una prensa. Tú le das la orden de bajar o subir. El pistón obedece y ejecuta la acción física, pero no se queda charlando contigo ni te devuelve datos.
+                    </div>
+                    <pre><code><span class="keyword">void</span> <span class="func">gestionarAlerta</span>(<span class="type">bool</span> peligro) {
+  digitalWrite(PINLED, peligro);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-card" style="border: 2px solid var(--accent-green);">
+            <h2 style="color: var(--accent-green);">Integración: El Loop Maestro</h2>
+            <p>Mira cómo el <code>void loop()</code> se convierte en un director de orquesta. No hace el trabajo pesado, solo coordina a sus especialistas.</p>
+            
+            <pre><code><span class="keyword">void</span> <span class="func">loop</span>() {
+  temp = <span class="func">obtenerTemperatura</span>(); <span class="comment">// 2. Llama al mensajero</span>
+  peligro = <span class="func">esPeligrosa</span>(temp);  <span class="comment">// 3. Llama al cerebro</span>
+  <span class="func">gestionarAlerta</span>(peligro);     <span class="comment">// 4. Llama al actuador</span>
+}</code></pre>
+        </section>
+<section class="section-card" style="border-top: 4px solid var(--esp-orange);">
+            <h2>06. Proyecto Integrador: Código y Circuito</h2>
+            <p>Este es el firmware completo que consolida los cuatro tipos de funciones. Observa cómo el código se vuelve legible y profesional al estar segmentado.</p>
+
+            <div class="grid">
+                <div>
+                    <p><strong>Instrucciones de Montaje:</strong></p>
+                    <ul style="color: var(--text-gray); line-height: 1.6;">
+                        <li>Conecta el <strong>Potenciómetro</strong> al Pin 34 (Entrada Analógica).</li>
+                        <li>El <strong>LED</strong> de diagnóstico se encuentra en el Pin 2 (interno del ESP32).</li>
+                        <li>Asegúrate de configurar la velocidad del monitor serial a <strong>115200 baudios</strong> para recibir los reportes del sistema.</li>
+                    </ul>
+                    
+                    <div class="image-box" style="margin-top: 20px;">
+                        <img src="Case06_FuncionesBasicas_Circuit.png" alt="Circuito de Funciones Básicas" style="width: 100%; border-radius: 10px;">
+                        <p><small>Esquema de conexión: Potenciómetro (Sensor) + ESP32</small></p>
+                    </div>
+                </div>
+
+                <div>
+                    <pre><code style="font-size: 0.85rem;">// --- CÓDIGO COMPLETO DEL SISTEMA ---
+#define PINSENSOR 34 
+#define PINLED 2    
+
+float temperaturaActual = 0;
+
+// Tipo 1: Sin Retorno / Sin Parámetros
+void imprimirEncabezado() {
+  Serial.println("--- SISTEMA MECATRÓNICO ---");
+  Serial.println("Estado: ACTIVO | GPIO 34");
+}
+
+// Tipo 2: Con Retorno / Sin Parámetros
+float obtenerTemperatura() {
+  int lecturaRaw = analogRead(PINSENSOR);
+  return (lecturaRaw * 100.0) / 4095.0; 
+}
+
+// Tipo 3: Con Retorno / Con Parámetros
+bool esPeligrosa(float temp) {
+  if (temp > 75.0) return true;
+  return false;
+}
+
+// Tipo 4: Sin Retorno / Con Parámetros
+void gestionarAlerta(bool peligro) {
+  digitalWrite(PINLED, peligro);
+  if (peligro) Serial.println("ALERTA: CRÍTICO");
+  else Serial.println("Normal.");
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PINLED, OUTPUT);
+  imprimirEncabezado();
+}
+
+void loop() {
+  temperaturaActual = obtenerTemperatura();
+  bool alerta = esPeligrosa(temperaturaActual);
+  gestionarAlerta(alerta);
+  delay(2000);
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="analogy-box" style="text-align: center; border: none; background: rgba(255, 157, 0, 0.1);">
+                <strong>💡 Tip de Ingeniería:</strong> Al usar <code>#define</code> en lugar de variables para los pines, ahorras memoria dinámica (RAM) en el microcontrolador, una práctica estándar en sistemas embebidos.
+            </div>
+        </section>
+
+<section class="section-card" style="border: 2px solid var(--esp-blue); background: rgba(0, 210, 255, 0.02);">
+            <h2 style="color: var(--esp-orange); border-color: var(--esp-orange);">07. Reto Avanzado: Sistema Multi-Modo</h2>
+            <p>En este ejercicio, el ESP32 actúa como una terminal inteligente. Dependiendo de la entrada del usuario en el <strong>Monitor Serial</strong>, el sistema redirige el flujo hacia diferentes tipos de funciones.</p>
+
+            <div class="grid">
+                <div>
+                    <h3>Paso 1: La Interfaz de Usuario</h3>
+                    <p>El <code>void loop()</code> ahora funciona como un gestor de eventos. Utiliza <code>Serial.available()</code> para "escuchar" órdenes externas.</p>
+                    
+                    <div class="analogy-box">
+                        <strong>Analogía de la Cabina:</strong> 
+                        Es como el panel de control de un piloto. El sistema espera a que el piloto pulse un botón (1, 2 o 3) para decidir qué subsistema activar.
+                    </div>
+
+                    <h3>Paso 2: Tipos de Salida</h3>
+                    <ul>
+                        <li><strong>Digital:</strong> Encendido/Apagado total.</li>
+                        <li><strong>Analógico (PWM):</strong> Variación de intensidad mediante ciclos definidos por software.</li>
+                        <li><strong>Mapeo:</strong> Sincronización proporcional entre un sensor (Potenciómetro) y un actuador (LED).</li>
+                    </ul>
+
+                    <div class="image-box" style="margin-top: 20px;">
+                        <img src="Case07_LED_POT_FUNCTIONS_Circuit.png" alt="Conexión Potenciómetro y LED" style="width: 100%; border-radius: 10px;">
+                        <p><small>Circuito requerido: Control de intensidad por hardware y software.</small></p>
+                    </div>
+                </div>
+
+                <div>
+                    <pre><code style="font-size: 0.85rem;"><span class="comment">// 1. ACCIÓN DIGITAL (Sin retorno / con parámetros)</span>
+<span class="keyword">void</span> <span class="func">ledDigital</span>(<span class="type">int</span> led, <span class="type">int</span> pausa){
+  digitalWrite(led, HIGH);
+  delay(pausa);
+  digitalWrite(led, LOW);
+}
+
+<span class="comment">// 2. ACCIÓN ANALÓGICA (Ciclo For / PWM)</span>
+<span class="keyword">void</span> <span class="func">ledAnalogico</span>(<span class="type">int</span> led, <span class="type">int</span> pausa, <span class="type">int</span> inc){
+  <span class="keyword">for</span>(<span class="type">int</span> i=0; i <= 255; i+=inc){
+    analogWrite(led, i);
+    delay(pausa);
+  }
+}
+
+<span class="comment">// 3. ACCIÓN DE MAPEO (Entrada vs Salida)</span>
+<span class="keyword">void</span> <span class="func">ledPot</span>(<span class="type">int</span> led, <span class="type">int</span> pot){
+  <span class="type">int</span> readPot = analogRead(pot);
+  <span class="comment">// Convertimos 0-4095 (12 bits) a 0-255 (8 bits)</span>
+  <span class="type">int</span> light = map(readPot, 0, 4095, 0, 255);
+  analogWrite(led, light);
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="analogy-box" style="background: rgba(0, 210, 255, 0.1); border-left: 4px solid var(--esp-blue);">
+                <strong>💡 Lección de Ingeniería:</strong> La función <code>map()</code> es fundamental en mecatrónica para normalizar señales. Nos permite "traducir" el lenguaje de un sensor al lenguaje de un actuador aunque trabajen en escalas diferentes.
+            </div>
+        </section>
+
+<section class="section-card" style="border: 2px solid var(--accent-green); background: rgba(57, 255, 20, 0.02);">
+            <h2 style="color: var(--accent-green); border-color: var(--accent-green);">08. Misión Final: Control de Alumbrado Inteligente</h2>
+            <p>Es hora de demostrar tus habilidades. Debes implementar un sistema de control para <strong>Mecatronics S.A.</strong> que gestione la iluminación basado en el entorno, utilizando una arquitectura modular profesional.</p>
+
+            <div class="grid">
+                <div>
+                    <h3>📋 Especificaciones del Reto</h3>
+                    <p>El sistema debe segmentarse en 4 funciones obligatorias. El <code>loop()</code> solo debe actuar como coordinador.</p>
+                    
+                    <ul style="color: var(--text-gray); line-height: 1.8;">
+                        <li><strong style="color: var(--esp-blue);">F1 (Bienvenida):</strong> Imprimir nombre de empresa y versión en el Serial.</li>
+                        <li><strong style="color: var(--esp-blue);">F2 (Lectura):</strong> Retornar valor crudo (0-4095) del Pin 34.</li>
+                        <li><strong style="color: var(--esp-blue);">F3 (Lógica):</strong> Clasificar el nivel en "DIA", "NUBLADO" o "NOCHE".</li>
+                        <li><strong style="color: var(--esp-blue);">F4 (Acción):</strong> Controlar el LED (Pin 2) con encendido, apagado o parpadeo lento.</li>
+                    </ul>
+
+                    <div class="analogy-box">
+                        <strong>Estrategia de Desarrollo:</strong> 
+                        No intentes escribir todo de una vez. Primero declara las firmas de las funciones, luego implementa la lógica de cada una y finalmente conéctalas en el loop.
+                    </div>
+                </div>
+
+                <div>
+                    <p><strong>Estructura Base del Código:</strong></p>
+                    <pre><code style="font-size: 0.8rem;"><span class="comment">// --- AQUÍ DEBEN DESARROLLAR LAS 4 FUNCIONES ---</span>
+<span class="type">void</span> <span class="func">bienvenida</span>();
+<span class="type">int</span> <span class="func">leerAmbiente</span>();
+<span class="type">String</span> <span class="func">categorizarLuz</span>(<span class="type">int</span> valor);
+<span class="type">void</span> <span class="func">ejecutarAccion</span>(<span class="type">String</span> estado);
+
+<span class="type">void</span> <span class="func">loop</span>() {
+  <span class="type">int</span> nivelLuz = <span class="func">leerAmbiente</span>();
+  <span class="type">String</span> clima = <span class="func">categorizarLuz</span>(nivelLuz);
+  
+  Serial.print(<span class="keyword">"Nivel: "</span>); Serial.print(nivelLuz);
+  Serial.print(<span class="keyword">" | Estado: "</span>); Serial.println(clima);
+  
+  <span class="func">ejecutarAccion</span>(clima);
+  delay(<span class="type">1000</span>);
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="image-box" style="margin-top: 30px; border-color: var(--accent-green);">
+                
+                <p><small>Diagrama de flujo: Entrada Analógica → Procesamiento de Rangos → Salida Digital/PWM</small></p>
+            </div>
+
+            <div class="analogy-box" style="text-align: center; border: none; background: rgba(57, 255, 20, 0.1); margin-top: 20px;">
+                <strong>🚀 Criterio de Éxito:</strong> El código debe compilar sin errores y el monitor serial debe mostrar el cambio de estado en tiempo real al tapar el sensor LDR.
+            </div>
+        </section>
+
+    </main>
+
+
+
+    <footer>
+        <p>© 2026 - Ingeniería Mecatrónica - Universidad de Caldas</p>
+        <p><small>Diseñado para la Electiva Tecnológica II</small></p>
+    </footer>
+
+    <script>
+        // Animación de partículas en el fondo
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles;
+
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 60; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "#00d2ff";
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+
+        // Reveal effect on scroll
+        const observerOptions = { threshold: 0.2 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-card').forEach(card => observer.observe(card));
+    </script>
+</body>
+</html>
