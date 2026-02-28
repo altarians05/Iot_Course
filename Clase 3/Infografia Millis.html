@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Millis: El Arte del Multitasking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00a8cc;
+            --secondary: #274060;
+            --accent: #ff414d;
+            --light: #f4f7f6;
+            --dark: #1a1a1a;
+            --success: #00d1b2;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: -50px auto 50px;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 { font-size: 3rem; margin: 0; }
+        h2 { color: var(--secondary); border-left: 5px solid var(--primary); padding-left: 15px; }
+
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .box {
+            flex: 1;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .box-delay { background-color: #ffe5e5; border: 2px solid var(--accent); }
+        .box-millis { background-color: #e5f9f6; border: 2px solid var(--success); }
+
+        .code-block {
+            background-color: #2d3436;
+            color: #fab1a0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .interactive-demo {
+            text-align: center;
+            padding: 40px;
+            background: var(--dark);
+            color: white;
+            border-radius: 15px;
+        }
+
+        .led-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 20px;
+        }
+
+        .led {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #333;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .led.active-red { background-color: #ff414d; box-shadow: 0 0 20px #ff414d; }
+        .led.active-blue { background-color: #00a8cc; box-shadow: 0 0 20px #00a8cc; }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .math-box {
+            background: var(--secondary);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.video-item {
+    background: #f9f9f9;
+    border-radius: 10px;
+    padding: 15px;
+    border-left: 4px solid var(--primary);
+    transition: all 0.3s ease;
+}
+
+.video-item:hover {
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.video-link {
+    display: inline-block;
+    margin-bottom: 10px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.video-link:hover {
+    text-decoration: underline;
+}
+
+.video-desc {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #555;
+}
+
+.video-desc strong {
+    color: var(--secondary);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.exercise-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 850px) {
+    .exercise-grid { grid-template-columns: 1fr; }
+}
+
+.explanation-step {
+    background: #f0f7f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--primary);
+}
+
+.explanation-step h4 {
+    margin: 0 0 10px 0;
+    color: var(--secondary);
+    font-size: 1rem;
+}
+
+.explanation-step p {
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.code-small {
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+.highlight-text {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.analogy-box {
+    background: linear-gradient(to right, #e0f2f1, #ffffff);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    border: 1px dashed var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.analogy-icon { font-size: 2.5rem; }
+
+.task-card {
+    background: #ffffff;
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.task-card h5 { 
+    margin: 0 0 5px 0; 
+    color: var(--primary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.time-tag {
+    background: var(--secondary);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+}
+
+.challenge-intro {
+    background: #fff3cd;
+    border-left: 5px solid #ffc107;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.code-scrollable {
+    max-height: 650px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) #2d3436;
+}
+
+.code-scrollable::-webkit-scrollbar { width: 8px; }
+.code-scrollable::-webkit-scrollbar-track { background: #2d3436; border-radius: 8px; }
+.code-scrollable::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 8px; }
+
+.mission-card {
+    background: #ffffff;
+    border: 2px solid var(--secondary);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 4px 4px 0px var(--secondary);
+}
+
+.mission-card h4 {
+    margin: 0 0 10px 0;
+    color: var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rule-box {
+    background: #ffe5e5;
+    color: #d63031;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 15px;
+}
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⏱️ Millis vs Delay</h1>
+    <p>Guía definitiva para un código que nunca se detiene</p>
+</header>
+
+<div class="container">
+    
+    <div class="card">
+        <span class="badge">Concepto 1</span>
+        <h2>¿Por qué usamos delays?</h2>
+        <p>Los microcontroladores como Arduino son <strong>extremadamente rápidos</strong>. Si le pides a un LED que parpadee sin pausas, lo hará miles de veces por segundo; para tus ojos, simplemente parecerá que está encendido pero tenue.</p>
+        <div class="comparison">
+            <div class="box box-delay">
+                <h3>El problema de delay()</h3>
+                <p>Es una "pausa dura". El procesador se cruza de brazos y no lee sensores, no procesa WiFi, no hace NADA hasta que el tiempo termine.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <span class="badge">Analogía</span>
+        <h2>¿Cómo funciona Millis()?</h2>
+        <p>Imagina que estás cocinando una pizza 🍕. Tienes dos opciones:</p>
+        <ol>
+            <li><strong>Estilo Delay:</strong> Te sientas frente al horno y no te mueves durante 15 minutos. ¡No puedes ni contestar el teléfono!</li>
+            <li><strong>Estilo Millis:</strong> Metes la pizza, miras tu reloj y anotas: "Entró a las 12:00". Sigues limpiando la cocina. Cada minuto miras tu reloj: "¿Ya son las 12:15?".</li>
+        </ol>
+        <div class="math-box">
+            Fórmula Mágica: <br>
+            <strong>Tiempo Actual - Tiempo Anterior >= Intervalo Deseado</strong>
+        </div>
+    </div>
+
+    <div class="card interactive-demo">
+        <h2>Simulador Multitarea</h2>
+        <p>Mira cómo Millis permite que dos procesos corran a velocidades distintas sin estorbarse.</p>
+        <div class="led-container">
+            <div>
+                <div id="led1" class="led"></div>
+                <p>LED 1 (500ms)</p>
+            </div>
+            <div>
+                <div id="led2" class="led"></div>
+                <p>LED 2 (800ms)</p>
+            </div>
+        </div>
+        <button onclick="toggleDemo()" id="btnDemo" style="padding: 10px 20px; cursor:pointer; border-radius: 5px; border:none; background: var(--success); color:white; margin-top: 20px;">Iniciar Sistema</button>
+    </div>
+
+    <div class="card">
+        <span class="badge">Programación</span>
+        <h2>La Estructura Ganadora</h2>
+        <p>Para usar <code>millis()</code>, necesitamos variables globales que "sobrevivan" a cada vuelta del loop.</p>
+        <div class="code-block">
+            unsigned long tiempoPrevio = 0;<br>
+            const long intervalo = 1000; <br><br>
+            void loop() {<br>
+            &nbsp;&nbsp;unsigned long tiempoActual = millis();<br><br>
+            &nbsp;&nbsp;if (tiempoActual - tiempoPrevio >= intervalo) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;tiempoPrevio = tiempoActual; // ¡Reseteamos el cronómetro!<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;// Haz tu magia aquí...<br>
+            &nbsp;&nbsp;}<br>
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>¿Cuándo sí usar Delay? ✅</h2>
+        <ul>
+            <li>En el <code>setup()</code>: Cuando un sensor necesita 2 segundos para despertar al encenderse.</li>
+            <li>Pausas cortas: <code>delayMicroseconds()</code> para señales de disparo (como el Trigger del ultrasonido).</li>
+            <li>Proyectos simples: Donde solo haces UNA cosa y no importa que se detenga.</li>
+        </ul>
+    </div>
+
+<div class="card">
+    <span class="badge" style="background: var(--accent);">Recursos Extra</span>
+    <h2>Aprende de los Expertos 📺</h2>
+    <p>Si aún tienes dudas, estos videos son las mejores guías visuales para dominar el tiempo en Arduino:</p>
+    
+    <div class="video-grid">
+        <div class="video-item">
+            <a href="https://www.youtube.com/watch?v=BYKQ9rk0FEQ" target="_blank" class="video-link">▶️ Millis() vs Delay() - Estructura</a>
+            <div class="video-desc">
+                <strong>¿Qué aprenderás?</strong>
+                Muestra cómo la CPU se "detiene" físicamente con delay y cómo millis permite que el <code>loop()</code> siga fluyendo. Ideal para entender la arquitectura básica del sketch.
+            </div>
+        </div>
+
+        <div class="video-item">
+            <a href="https://www.youtube.com/watch?v=IyxY1uQyY9U" target="_blank" class="video-link">▶️ Código Bloqueante y Ajustes</a>
+            <div class="video-desc">
+                <strong>¿Qué aprenderás?</strong>
+                Una explicación profunda sobre los "bucles ajustados". Explica por qué el código bloqueante es el enemigo de los proyectos profesionales y cómo sincronizar eventos.
+            </div>
+        </div>
+
+        <div class="video-item">
+            <a href="https://www.youtube.com/watch?v=ib3PGI3Zrmc" target="_blank" class="video-link">▶️ Timing Events Mini-Series</a>
+            <div class="video-desc">
+                <strong>¿Qué aprenderás?</strong>
+                Este video es oro puro para entender eventos concurrentes. Explica cómo manejar múltiples cronómetros independientes sin que uno interfiera con el otro.
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <span class="badge" style="background: var(--success);">Ejercicio Base</span>
+    <h2>Anatomía de un Código Multitarea 🧠</h2>
+    <p>Analicemos cómo implementar dos tareas independientes (un LED y un Mensaje) sin que se bloqueen entre sí:</p>
+    
+    <div class="exercise-grid">
+        <div class="code-block code-small">
+<pre>
+unsigned long t_previo_1 = 0;
+unsigned long t_previo_2 = 0;
+const long intervalo_LED = 500;  
+const long intervalo_MSG = 2000; 
+
+void loop() {
+  unsigned long t_actual = millis();
+
+  // Tarea 1: Parpadeo de LED
+  if (t_actual - t_previo_1 >= intervalo_LED) {
+    t_previo_1 = t_actual;
+    digitalWrite(2, !digitalRead(2));
+  }
+
+  // Tarea 2: Reporte Serial
+  if (t_actual - t_previo_2 >= intervalo_MSG) {
+    t_previo_2 = t_actual;
+    Serial.println("Sistema operando...");
+  }
+}
+</pre>
+        </div>
+
+        <div class="explanation-box">
+            <div class="explanation-step">
+                <h4>1. Variables de Memoria</h4>
+                <p><code>t_previo_1</code> y <code>2</code> actúan como los "papelitos" donde el Chef anota a qué hora terminó la última tarea. Deben ser <span class="highlight-text">unsigned long</span> porque el tiempo de millis crece mucho.</p>
+            </div>
+
+            <div class="explanation-step">
+                <h4>2. Captura del Tiempo</h4>
+                <p><code>t_actual = millis()</code> toma una "foto" del reloj en el instante exacto en que inicia la vuelta del loop. Usamos esta misma foto para todas las comparaciones.</p>
+            </div>
+
+            <div class="explanation-step">
+                <h4>3. La Resta Lógica</h4>
+                <p><code>t_actual - t_previo >= intervalo</code><br>Es la pregunta clave: ¿El tiempo que ha pasado desde la última vez es mayor o igual a mi espera? Si no, el código salta este bloque y sigue con la siguiente tarea.</p>
+            </div>
+
+            <div class="explanation-step">
+                <h4>4. El Reset del Cronómetro</h4>
+                <p><code>t_previo = t_actual</code><br>¡Fundamental! Una vez que ejecutamos la acción, anotamos la nueva hora para que la espera comience de nuevo desde cero.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="border-top: 5px solid var(--secondary);">
+    <span class="badge" style="background: var(--secondary);">Escenario Real</span>
+    <h2>Monitor Industrial Multitarea 🏭</h2>
+    
+    <div class="analogy-box">
+        <div class="analogy-icon">👷‍♂️</div>
+        <p style="margin: 0; font-style: italic; font-size: 0.95rem;">
+            "En nuestra fábrica, tenemos 3 operarios. Cada uno tiene su propio cronómetro. El operario del <strong>Nivel</strong> mide cada 500ms, el del <strong>Clima</strong> cada 2.5s y el de la <strong>Alarma</strong> parpadea sin parar. Gracias a <code>millis()</code>, nadie tiene que esperar a nadie."
+        </p>
+    </div>
+
+    <div class="exercise-grid">
+        <div class="code-block code-small">
+<pre>
+#include &lt;DHT.h&gt;
+// ... (Pines y Objetos)
+unsigned long t_AnteriorUS = 0;
+unsigned long t_AnteriorDHT = 0;
+unsigned long t_AnteriorLED = 0;
+
+void loop() {
+  unsigned long t_actual = millis();
+
+  // TAREA 1: Ultrasonico (500ms)
+  if (t_actual - t_AnteriorUS >= 500) {
+    t_AnteriorUS = t_actual;
+    // ... Pulso y lectura ...
+    distancia = duracion * 0.034 / 2;
+    
+    // Control dinámico
+    intervaloLED = (distancia < 10) ? 100 : 1000;
+  }
+
+  // TAREA 2: Clima (2500ms)
+  if (t_actual - t_AnteriorDHT >= 2500) {
+    t_AnteriorDHT = t_actual;
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+  }
+
+  // TAREA 3: LED (Variable)
+  if (t_actual - t_AnteriorLED >= intervaloLED) {
+    t_AnteriorLED = t_actual;
+    digitalWrite(2, !digitalRead(2));
+  }
+}
+</pre>
+        </div>
+
+        <div class="explanation-box">
+            <div class="task-card">
+                <h5>Tarea 1: Nivel Crítico <span class="time-tag">500ms</span></h5>
+                <p style="font-size: 0.85rem;">Es la tarea más rápida. Observa cómo aquí <strong>modificamos el intervalo</strong> de otra tarea (el LED) si la distancia es menor a 10cm.</p>
+            </div>
+
+            <div class="task-card">
+                <h5>Tarea 2: Sensor Lento <span class="time-tag">2500ms</span></h5>
+                <p style="font-size: 0.85rem;">El DHT22 es lento por naturaleza. Al usar 2.5s, evitamos leerlo demasiado rápido, lo que causaría errores, pero <strong>sin detener</strong> el resto del código.</p>
+            </div>
+
+            <div class="task-card">
+                <h5>Tarea 3: Feedback Visual <span class="time-tag">Dinámico</span></h5>
+                <p style="font-size: 0.85rem;">El LED no sabe qué miden los sensores, él solo obedece a su variable <code>intervaloLED</code>. Esto es desacoplamiento de tareas.</p>
+            </div>
+
+            <div class="explanation-step" style="background: #fff3cd; border-color: #ffc107;">
+                <h4>⚡ Dato Pro:</h4>
+                <p>Dentro de los bloques <code>if</code> de millis, todavía usamos <code>delayMicroseconds(10)</code> para el sensor ultrasónico. Esto es válido porque son microsegundos (no bloquean casi nada), a diferencia de <code>delay(1000)</code>.</p>
+            </div>
+        </div>
+    </div>
+
+<hr style="border: 0; height: 1px; background: #ddd; margin: 40px 0 20px;">
+    
+    <h3 style="color: var(--secondary); margin-bottom: 10px;">🛠️ Armamento Hardware: Documentación y Librerías</h3>
+    <p style="font-size: 0.9rem; margin-bottom: 20px; color: #555;">
+        Para implementar este código en la vida real, necesitas entender cómo interactúan estos componentes físicos con tu ESP32. Aquí tienes los recursos técnicos esenciales:
+    </p>
+
+    <div class="video-grid">
+        <div class="video-item" style="border-left-color: #6c5ce7;">
+            <span class="badge" style="background: #6c5ce7; font-size: 0.65rem;">Hardware / Física</span>
+            <h4 style="margin: 5px 0 10px; color: var(--secondary);">Ojos del Sistema: HC-SR04</h4>
+            <div class="video-desc" style="margin-bottom: 15px;">
+                Calcula la distancia emitiendo ondas acústicas a 40kHz y midiendo el tiempo de rebote. Requiere un pulso inicial (Trigger) de 10µs. La fórmula estándar para convertir el tiempo en centímetros es: <code>Distancia = (Duración x 0.034) / 2</code>.
+                
+            </div>
+            <a href="https://randomnerdtutorials.com/esp32-hc-sr04-ultrasonic-arduino/" target="_blank" class="video-link">📘 Guía RNT: ESP32 + HC-SR04</a>
+        </div>
+
+        <div class="video-item" style="border-left-color: #e17055;">
+            <span class="badge" style="background: #e17055; font-size: 0.65rem;">Hardware / Limitaciones</span>
+            <h4 style="margin: 5px 0 10px; color: var(--secondary);">Termómetro Digital: DHT11/22</h4>
+            <div class="video-desc" style="margin-bottom: 15px;">
+                Sensores altamente precisos que utilizan un elemento capacitivo y un termistor. <strong>Nota crucial:</strong> Son dispositivos lentos. El DHT22 requiere mínimo 2 segundos (2000ms) entre cada lectura para no bloquearse, lo que hace que <code>millis()</code> sea obligatorio para usarlo junto a otros sensores rápidos.
+            </div>
+            <a href="https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-sensor-arduino-ide/" target="_blank" class="video-link" style="display:block;">📘 Guía RNT: ESP32 + DHT22</a>
+            <a href="https://www.youtube.com/watch?v=xj446L2J_3U" target="_blank" class="video-link" style="color:#d63031;">▶️ Tutorial: Uso Práctico del DHT</a>
+        </div>
+
+        <div class="video-item" style="border-left-color: #00b894;">
+            <span class="badge" style="background: #00b894; font-size: 0.65rem;">Software / Dependencias</span>
+            <h4 style="margin: 5px 0 10px; color: var(--secondary);">El Motor: Librerías Adafruit</h4>
+            <div class="video-desc" style="margin-bottom: 15px;">
+                Para que funciones como <code>dht.readTemperature()</code> sean reconocidas, el Arduino IDE necesita instalar código de terceros. <strong>Cuidado:</strong> La librería principal del DHT no funciona sola; depende obligatoriamente de la librería "Unified Sensor" de Adafruit para procesar las unidades de medida.
+            </div>
+            <a href="https://github.com/adafruit/DHT-sensor-library" target="_blank" class="video-link" style="display:block;">📦 GitHub: DHT Sensor Library</a>
+            <a href="https://github.com/adafruit/Adafruit_Sensor" target="_blank" class="video-link">📦 GitHub: Adafruit Unified Sensor</a>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="border-top: 5px solid var(--accent);">
+    <span class="badge" style="background: var(--accent);">Evaluación Práctica</span>
+    <h2>Reto Final: Salva el Almacén Químico ☢️</h2>
+    
+    <div class="challenge-intro">
+        <strong>Contexto:</strong> Han sido contratados para diseñar el firmware de un nodo IoT en un almacén de químicos sensibles. El sistema debe monitorear constantemente la temperatura y detectar si alguien se acerca a la zona restringida. Si el microcontrolador se congela por culpa de un <code>delay()</code>, el sistema de ventilación fallará y el almacén corre riesgo de explosión. <strong>Su misión es construir un sistema 100% asíncrono.</strong>
+    </div>
+
+    <div class="exercise-grid">
+        <div class="code-block code-small code-scrollable">
+<pre>
+#include &lt;DHT.h&gt;
+
+// --- CONFIGURACIÓN DE PINES ---
+#define DHTPIN 4
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+
+#define TRIG_PIN 5
+#define ECHO_PIN 18
+#define LED_PROX_PIN 2   // LED 1 (Proximidad)
+#define LED_TEMP_PIN 21  // LED 2 (Temperatura)
+
+// --- TEMPORIZADORES (¡No tocar!) ---
+unsigned long t_previo_us = 0;
+unsigned long t_previo_dht = 0;
+unsigned long t_previo_led1 = 0;
+unsigned long t_previo_led2 = 0;
+unsigned long t_previo_reporte = 0;
+
+// --- VARIABLES DE ESTADO GLOBALES ---
+// Usen estas variables para guardar las lecturas
+float distanciaActual = 0.0;
+float tempActual = 0.0;
+float humActual = 0.0;
+bool estadoLED1 = false;
+bool estadoLED2 = false;
+
+// --- INTERVALOS DINÁMICOS ---
+long int_led1 = 1000;
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(LED_PROX_PIN, OUTPUT);
+  pinMode(LED_TEMP_PIN, OUTPUT);
+  
+  Serial.println("Iniciando Sistema de Seguridad y Clima...");
+  Serial.println("¡Tu turno de programar las tareas!");
+}
+
+void loop() {
+  // 1. Capturar el tiempo actual del sistema
+  unsigned long t_actual = millis();
+
+  // ==========================================
+  // MISIÓN 1: Escáner de Proximidad (400 ms)
+  // ==========================================
+  // TODO: Crear el condicional if usando millis()
+  // TODO: Leer el sensor ultrasónico y guardar el valor en 'distanciaActual'
+  // TODO: Cambiar el valor de 'int_led1' dependiendo de si la distancia es < 15 o no.
+
+  // ==========================================
+  // MISIÓN 2: Monitor de Clima (3000 ms)
+  // ==========================================
+  // TODO: Crear el condicional if usando millis()
+  // TODO: Leer el DHT22 y guardar los valores en 'tempActual' y 'humActual'
+
+  // ==========================================
+  // MISIÓN 3: LED de Proximidad (Intervalo Dinámico)
+  // ==========================================
+  // TODO: Crear el condicional if usando 'int_led1'
+  // TODO: Invertir 'estadoLED1' y aplicarlo al LED_PROX_PIN
+
+  // ==========================================
+  // MISIÓN 4: LED de Sobrecalentamiento
+  // ==========================================
+  // TODO: Si 'tempActual' > 28.0, usar millis() para parpadear cada 250 ms.
+  // TODO: Si la temperatura es normal, apagar el LED_TEMP_PIN.
+
+  // ==========================================
+  // MISIÓN 5: Reporte de Consola (5000 ms)
+  // ==========================================
+  // TODO: Crear el condicional if usando millis()
+  // TODO: Imprimir el texto consolidado con todas las variables de estado.
+}
+</pre>
+        </div>
+
+        <div class="explanation-box">
+            <h3 style="margin-top: 0; color: var(--secondary);">El Manual Operativo</h3>
+            
+            <div class="mission-card">
+                <h4>📡 Tarea 1 & 2: Sensores <span class="time-tag" style="background: var(--primary);">400ms / 3000ms</span></h4>
+                <p style="font-size: 0.85rem; margin-bottom:0;"><strong>HC-SR04 (400ms):</strong> Lee la distancia. Si es menor a 15cm, pon <code>int_led1 = 100</code> (modo pánico), sino <code>int_led1 = 1000</code> (latido normal).<br>
+                <strong>DHT22 (3000ms):</strong> Almacena temperatura y humedad en sus variables globales.</p>
+            </div>
+
+            <div class="mission-card">
+                <h4>🚨 Tarea 3 & 4: Actuadores <span class="time-tag" style="background: var(--primary);">Dinámico / 250ms</span></h4>
+                <p style="font-size: 0.85rem; margin-bottom:0;"><strong>LED Prox:</strong> Parpadea usando <code>int_led1</code>.<br>
+                <strong>LED Temp:</strong> Si <code>tempActual > 28.0</code>, parpadea cada 250ms usando la lógica de millis. Si está fresca, mantén el pin APAGADO (LOW).</p>
+            </div>
+
+            <div class="mission-card">
+                <h4>🖨️ Tarea 5: Reporte Central <span class="time-tag" style="background: var(--primary);">5000ms</span></h4>
+                <p style="font-size: 0.85rem; margin-bottom:0;">Imprime un reporte usando las variables globales en este exacto formato:<br>
+                <code>[REPORTE] Temp: 25.4C | Hum: 60% | Distancia: 45cm | Estado: SEGURO</code></p>
+            </div>
+
+            <div class="rule-box">
+                ⚠️ REGLA DE ORO ⚠️<br>
+                ¡PROHIBIDO USAR delay()!<br>
+                <span style="font-size: 0.8rem; font-weight: normal; color: var(--dark);">La única excepción es <code>delayMicroseconds()</code> para el pulso Trigger del ultrasónico. Todo lo demás provocará un "desastre químico".</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<footer>
+    <p>Creado para la Clase de IoT - ¡Domina tu código! 🚀</p>
+</footer>
+
+<script>
+    let running = false;
+    let timer1 = 0;
+    let timer2 = 0;
+    let lastTime = 0;
+    const int1 = 500;
+    const int2 = 800;
+
+    function toggleDemo() {
+        running = !running;
+        document.getElementById('btnDemo').innerText = running ? "Detener Sistema" : "Iniciar Sistema";
+        if(running) {
+            lastTime = Date.now();
+            requestAnimationFrame(update);
+        }
+    }
+
+    function update() {
+        if(!running) return;
+        
+        let now = Date.now();
+        let delta = now - lastTime;
+        
+        timer1 += delta;
+        timer2 += delta;
+        
+        if(timer1 >= int1) {
+            document.getElementById('led1').classList.toggle('active-red');
+            timer1 = 0;
+        }
+        
+        if(timer2 >= int2) {
+            document.getElementById('led2').classList.toggle('active-blue');
+            timer2 = 0;
+        }
+        
+        lastTime = now;
+        requestAnimationFrame(update);
+    }
+</script>
+
+</body>
+</html>
